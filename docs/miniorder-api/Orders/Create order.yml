@@ -1,0 +1,15 @@
+info:
+  name: Create order
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{local_base_url}}/orders"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

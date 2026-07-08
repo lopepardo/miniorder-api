@@ -1,0 +1,22 @@
+info:
+  name: Create product
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{local_base_url}}/products"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Tea",
+        "priceInCents": 150
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

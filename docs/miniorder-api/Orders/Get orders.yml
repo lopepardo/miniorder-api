@@ -1,0 +1,15 @@
+info:
+  name: Get orders
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{local_base_url}}/orders"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

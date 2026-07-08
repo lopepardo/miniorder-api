@@ -1,0 +1,15 @@
+info:
+  name: Get product by id
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: "{{local_base_url}}/products/8832d908-4d1a-4157-a600-5f3555dd8cb0"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

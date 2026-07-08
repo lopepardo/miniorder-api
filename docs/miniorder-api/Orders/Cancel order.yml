@@ -1,0 +1,15 @@
+info:
+  name: Cancel order
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{local_base_url}}/orders/ee1f24dc-e5d5-4712-883d-7a339f8ca0fe/cancel"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

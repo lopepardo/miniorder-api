@@ -1,0 +1,15 @@
+info:
+  name: Confirm order
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{local_base_url}}/orders/8791d358-8748-4603-991d-84d0391440a2/confirm"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

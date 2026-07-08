@@ -1,0 +1,53 @@
+{
+  "name": "miniorder",
+  "version": "1.0.0",
+  "description": "Proyecto base en TypeScript para practicar arquitectura de software con un sistema local de pedidos.",
+  "type": "module",
+  "main": "dist/main.js",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "dev": "tsx --watch src/main.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "db:migrate": "tsx src/cli/migrate.ts",
+    "db:migrate:prod": "node dist/cli/migrate.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "check": "npm run build && npm run test"
+  },
+  "keywords": [
+    "typescript",
+    "architecture",
+    "clean-architecture",
+    "learning-project"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.22.0",
+    "pino": "^10.3.1",
+    "pino-http": "^11.0.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.4",
+    "@types/pg": "^8.20.0",
+    "@types/supertest": "^7.2.0",
+    "eslint": "^10.5.0",
+    "pino-pretty": "^13.1.3",
+    "prettier": "^3.8.4",
+    "supertest": "^7.2.2",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.0",
+    "vitest": "^4.1.9"
+  }
+}

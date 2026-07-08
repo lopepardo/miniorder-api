@@ -1,0 +1,62 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: miniorder-api
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      LOG_LEVEL: info
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: miniorder
+      DB_PASSWORD: miniorder_dev_password
+      DB_NAME: miniorder
+      DB_SSL: false
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # migrate:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: miniorder-migrate
+  #   command: ["node", "dist/cli/migrate.js"]
+  #   environment:
+  #     NODE_ENV: production
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #     DB_USER: miniorder
+  #     DB_PASSWORD: miniorder_dev_password
+  #     DB_NAME: miniorder
+  #     DB_SSL: false
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   restart: "no"
+
+  postgres:
+    image: postgres:18-alpine
+    container_name: miniorder-postgres
+    environment:
+      POSTGRES_DB: miniorder
+      POSTGRES_USER: miniorder
+      POSTGRES_PASSWORD: miniorder_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U miniorder -d miniorder"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

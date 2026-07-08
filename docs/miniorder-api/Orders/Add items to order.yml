@@ -1,0 +1,22 @@
+info:
+  name: Add items to order
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{local_base_url}}/orders/ee1f24dc-e5d5-4712-883d-7a339f8ca0fe/items"
+  body:
+    type: json
+    data: |-
+      {
+        "productId": "8832d908-4d1a-4157-a600-5f3555dd8cb0",
+        "quantity": 500
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
