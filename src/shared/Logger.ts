@@ -1,6 +1,8 @@
 import pino, { type LoggerOptions, type Logger as PinoLogger } from "pino";
 import { env } from "../infrastructure/config/env.js";
 
+const isDevelopment = env.environment === "development";
+
 const loggerOptions: LoggerOptions = {
   level: env.logger.level,
 
@@ -10,11 +12,18 @@ const loggerOptions: LoggerOptions = {
   },
 
   redact: {
-    paths: ["password", "token", "authorization", "headers.authorization"],
+    paths: [
+      "password",
+      "token",
+      "authorization",
+      "headers.authorization",
+      "req.headers.authorization",
+      "req.headers.cookie",
+    ],
     censor: "[REDACTED]",
   },
 
-  ...(env.environment === "development"
+  ...(isDevelopment
     ? {
         transport: {
           target: "pino-pretty",
