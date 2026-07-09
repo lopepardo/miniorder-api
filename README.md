@@ -210,7 +210,6 @@ Puede abrirse con **Bruno** para probar los endpoints de forma local.
 - pnpm `11.9.0`
 - Docker
 - Docker Compose
-- Cliente `psql`, opcional para ejecutar migraciones manualmente desde la terminal
 
 ## Variables de entorno
 
