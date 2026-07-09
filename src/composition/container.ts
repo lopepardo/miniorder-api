@@ -91,5 +91,8 @@ export const buildContainer = async (env: AppConfig) => {
       confirmOrderUseCase,
       cancelOrderUseCase,
     }),
+    close: async () => {
+      await db.end();
+    },
   };
 };
