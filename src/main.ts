@@ -44,6 +44,7 @@ const bootstrap = async () => {
 const closeHttpServer = (server: Server): Promise<void> => {
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
+      server.closeAllConnections();
       reject(new Error("HTTP server shutdown timeout"));
     }, 10_000);
 

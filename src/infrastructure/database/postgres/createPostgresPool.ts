@@ -1,4 +1,5 @@
 import { Pool } from "pg";
+import { logger } from "../../../shared/Logger.js";
 
 type PostgresConfig = {
   host: string;
@@ -10,7 +11,7 @@ type PostgresConfig = {
 };
 
 export const createPostgresPool = (config: PostgresConfig) => {
-  return new Pool({
+  const pool = new Pool({
     host: config.host,
     port: config.port,
     user: config.user,
@@ -18,6 +19,23 @@ export const createPostgresPool = (config: PostgresConfig) => {
     database: config.name,
     ssl: config.ssl ? { rejectUnauthorized: false } : false,
   });
+
+  pool.on("error", (error) => {
+    logger.error(
+      {
+        error,
+        code: "code" in error ? error.code : undefined,
+        pool: {
+          total: pool.totalCount,
+          idle: pool.idleCount,
+          waiting: pool.waitingCount,
+        },
+      },
+      "Unexpected PostgreSQL pool error",
+    );
+  });
+
+  return pool;
 };
 
 export type PostgresPool = ReturnType<typeof createPostgresPool>;
