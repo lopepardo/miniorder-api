@@ -3,9 +3,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: miniorder-api
+    image: miniorder-api:local
     ports:
-      - "3000:3000"
+      - "${PORT:-3000}:3000"
     environment:
       NODE_ENV: production
       PORT: 3000
@@ -21,28 +21,8 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  # migrate:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: miniorder-migrate
-  #   command: ["node", "dist/cli/migrate.js"]
-  #   environment:
-  #     NODE_ENV: production
-  #     DB_HOST: postgres
-  #     DB_PORT: 5432
-  #     DB_USER: miniorder
-  #     DB_PASSWORD: miniorder_dev_password
-  #     DB_NAME: miniorder
-  #     DB_SSL: false
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   restart: "no"
-
   postgres:
     image: postgres:18-alpine
-    container_name: miniorder-postgres
     environment:
       POSTGRES_DB: miniorder
       POSTGRES_USER: miniorder
