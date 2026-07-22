@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{local_base_url}}/orders/8791d358-8748-4603-991d-84d0391440a2/confirm"
+  url: "{{local_base_url}}/orders/34e302a8-d41d-4f1b-aec5-1dc05d3d2de8/confirm"
   auth: inherit
 
 settings:

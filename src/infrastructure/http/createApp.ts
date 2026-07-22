@@ -22,7 +22,11 @@ export const createApp = (dependencies: AppDependencies): express.Express => {
   app.use(express.json());
 
   app.get("/health", (_request, response) => {
-    response.json({ status: "ok" });
+    response.json({
+      status: "ok",
+      instance: process.env.HOSTNAME,
+      port: process.env.PORT,
+    });
   });
 
   app.use("/products", createProductRoutes(dependencies.productController));

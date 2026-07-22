@@ -8,6 +8,11 @@ type PostgresConfig = {
   password: string;
   name: string;
   ssl: boolean;
+  poolMax: number;
+  poolMin: number;
+  idleTimeoutMillis: number;
+  connectionTimeoutMillis: number;
+  maxLifetimeSeconds: number;
 };
 
 export const createPostgresPool = (config: PostgresConfig) => {
@@ -18,6 +23,12 @@ export const createPostgresPool = (config: PostgresConfig) => {
     password: config.password,
     database: config.name,
     ssl: config.ssl ? { rejectUnauthorized: false } : false,
+
+    max: config.poolMax,
+    min: config.poolMin,
+    idleTimeoutMillis: config.idleTimeoutMillis,
+    connectionTimeoutMillis: config.connectionTimeoutMillis,
+    maxLifetimeSeconds: config.maxLifetimeSeconds,
   });
 
   pool.on("error", (error) => {

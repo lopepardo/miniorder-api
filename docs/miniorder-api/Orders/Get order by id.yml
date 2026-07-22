@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{local_base_url}}/orders/ee1f24dc-e5d5-4712-883d-7a339f8ca0fe"
+  url: "{{local_base_url}}/orders/34e302a8-d41d-4f1b-aec5-1dc05d3d2de8"
   auth: inherit
 
 settings:
