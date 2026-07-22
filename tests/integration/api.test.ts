@@ -2,10 +2,11 @@ import request from "supertest";
 import { describe, expect, it } from "vitest";
 import { buildContainer } from "../../src/composition/container.js";
 import { createApp } from "../../src/infrastructure/http/createApp.js";
+import { env } from "../../src/infrastructure/config/env.js";
 
 describe("MiniOrder API", () => {
   it("creates a product, creates an order, adds an item and confirms the order", async () => {
-    const container = await buildContainer();
+    const container = await buildContainer(env);
     const app = createApp(container);
 
     const productResponse = await request(app)
@@ -35,7 +36,7 @@ describe("MiniOrder API", () => {
   });
 
   it("returns a validation error for invalid product input", async () => {
-    const container = await buildContainer();
+    const container = await buildContainer(env);
     const app = createApp(container);
 
     const response = await request(app)

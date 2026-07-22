@@ -35,7 +35,7 @@ export const makeProductController = (deps: ProductControllerDeps) => {
     getById: async (request: Request, response: Response): Promise<void> => {
       const { productId } = productIdParamsSchema.parse(request.params);
       const product = await deps.getProductUseCase(productId);
-      response.status(201).json({ data: product });
+      response.json({ data: product });
     },
   };
 };
