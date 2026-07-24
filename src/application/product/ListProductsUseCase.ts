@@ -1,4 +1,5 @@
 import type { ProductRepository } from "../ports/ProductRepository.js";
+import type { PaginatedResult, PaginationInput } from "../shared/Pagination.js";
 import { toProductDTO, type ProductDTO } from "./ProductDTO.js";
 
 type ListProductsUseCaseDeps = {
@@ -6,9 +7,17 @@ type ListProductsUseCaseDeps = {
 };
 
 export const makeListProductsUseCase = (deps: ListProductsUseCaseDeps) => {
-  return async (): Promise<ProductDTO[]> => {
-    const products = await deps.productRepository.findAll();
-    return products.map(toProductDTO);
+  return async (pagination: PaginationInput): Promise<PaginatedResult<ProductDTO>> => {
+    const { items, totalItems } = await deps.productRepository.findPage(pagination);
+
+    return {
+      items: items.map(toProductDTO),
+      meta: {
+        ...pagination,
+        totalItems,
+        totalPages: Math.ceil(totalItems / pagination.pageSize),
+      },
+    };
   };
 };
 

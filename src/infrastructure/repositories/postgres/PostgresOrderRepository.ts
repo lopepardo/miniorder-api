@@ -154,19 +154,27 @@ export function makePostgresOrderRepository(pool: PostgresPool): OrderRepository
       });
     },
 
-    async findAll(): Promise<Order[]> {
-      const orderResult = await pool.query<OrderRow>(`
-        SELECT
-          id,
-          status,
-          created_at,
-          confirmed_at,
-          cancelled_at
-        FROM orders
-        ORDER BY created_at ASC
-      `);
+    async findPage({ page, pageSize }) {
+      const offset = (page - 1) * pageSize;
+      const [orderResult, countResult] = await Promise.all([
+        pool.query<OrderRow>(
+          `
+          SELECT
+            id,
+            status,
+            created_at,
+            confirmed_at,
+            cancelled_at
+          FROM orders
+          ORDER BY created_at ASC, id ASC
+          LIMIT $1 OFFSET $2
+          `,
+          [pageSize, offset],
+        ),
+        pool.query<{ total: string }>("SELECT COUNT(*) AS total FROM orders"),
+      ]);
 
-      return Promise.all(
+      const items = await Promise.all(
         orderResult.rows.map(async (order) => {
           const itemResult = await pool.query(
             `
@@ -203,6 +211,11 @@ export function makePostgresOrderRepository(pool: PostgresPool): OrderRepository
           });
         }),
       );
+
+      return {
+        items,
+        totalItems: Number(countResult.rows[0]?.total ?? 0),
+      };
     },
   };
 }

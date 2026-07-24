@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { CreateProductUseCase } from "../../../application/product/CreateProductUseCase.js";
 import type { ListProductsUseCase } from "../../../application/product/ListProductsUseCase.js";
 import type { GetProductUseCase } from "../../../application/product/GetProductUseCase.js";
+import { paginationQuerySchema } from "../schemas/paginationQuerySchema.js";
 
 const createProductSchema = z.object({
   name: z.string().min(2),
@@ -27,9 +28,10 @@ export const makeProductController = (deps: ProductControllerDeps) => {
       response.status(201).json({ data: product });
     },
 
-    list: async (_request: Request, response: Response): Promise<void> => {
-      const products = await deps.listProductsUseCase();
-      response.json({ data: products });
+    list: async (request: Request, response: Response): Promise<void> => {
+      const pagination = paginationQuerySchema.parse(request.query);
+      const products = await deps.listProductsUseCase(pagination);
+      response.json({ data: products.items, meta: products.meta });
     },
 
     getById: async (request: Request, response: Response): Promise<void> => {

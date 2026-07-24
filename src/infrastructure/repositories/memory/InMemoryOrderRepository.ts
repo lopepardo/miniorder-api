@@ -36,8 +36,19 @@ export const makeInMemoryOrderRepository = (): OrderRepository => {
       return order ? clone(order) : null;
     },
 
-    findAll: async (): Promise<Order[]> => {
-      return Array.from(orders.values()).map((order) => clone(order));
+    findPage: async ({ page, pageSize }) => {
+      const start = (page - 1) * pageSize;
+      const sortedOrders = Array.from(orders.values()).sort((first, second) => {
+        const createdAtDifference =
+          first.toJSON().createdAt.getTime() - second.toJSON().createdAt.getTime();
+
+        return createdAtDifference || first.id.localeCompare(second.id);
+      });
+
+      return {
+        items: sortedOrders.slice(start, start + pageSize).map(clone),
+        totalItems: sortedOrders.length,
+      };
     },
   };
 };

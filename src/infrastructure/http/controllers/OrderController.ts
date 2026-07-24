@@ -6,6 +6,7 @@ import type { CreateOrderUseCase } from "../../../application/order/CreateOrderU
 import type { GetOrderUseCase } from "../../../application/order/GetOrderUseCase.js";
 import type { ListOrdersUseCase } from "../../../application/order/ListOrdersUseCase.js";
 import type { CancelOrderUseCase } from "../../../application/order/CancelOrderUseCase.js";
+import { paginationQuerySchema } from "../schemas/paginationQuerySchema.js";
 
 const orderIdParamsSchema = z.object({
   orderId: z.string().min(1),
@@ -32,9 +33,10 @@ export const makeOrderController = (deps: OrderControllerDeps) => {
       response.status(201).json({ data: order });
     },
 
-    list: async (_request: Request, response: Response): Promise<void> => {
-      const orders = await deps.listOrdersUseCase();
-      response.json({ data: orders });
+    list: async (request: Request, response: Response): Promise<void> => {
+      const pagination = paginationQuerySchema.parse(request.query);
+      const orders = await deps.listOrdersUseCase(pagination);
+      response.json({ data: orders.items, meta: orders.meta });
     },
 
     getById: async (request: Request, response: Response): Promise<void> => {

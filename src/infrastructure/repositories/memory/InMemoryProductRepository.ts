@@ -14,8 +14,21 @@ export const makeInMemoryProductRepository = (): ProductRepository => {
       return product ? Product.restore(product.toJSON()) : null;
     },
 
-    findAll: async (): Promise<Product[]> => {
-      return Array.from(products.values()).map((product) => Product.restore(product.toJSON()));
+    findPage: async ({ page, pageSize }) => {
+      const start = (page - 1) * pageSize;
+      const sortedProducts = Array.from(products.values()).sort((first, second) => {
+        const createdAtDifference =
+          second.toJSON().createdAt.getTime() - first.toJSON().createdAt.getTime();
+
+        return createdAtDifference || second.id.localeCompare(first.id);
+      });
+
+      return {
+        items: sortedProducts
+          .slice(start, start + pageSize)
+          .map((product) => Product.restore(product.toJSON())),
+        totalItems: sortedProducts.length,
+      };
     },
   };
 };

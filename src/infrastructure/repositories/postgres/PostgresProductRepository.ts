@@ -45,19 +45,30 @@ export const makePostgresProductRepository = (pool: PostgresPool): ProductReposi
       return result.rows[0] ? toProductDomain(result.rows[0]) : null;
     },
 
-    async findAll(): Promise<Product[]> {
-      const result = await pool.query(`
-        SELECT
-          id,
-          name,
-          price_cents,
-          is_active,
-          created_at
-        FROM products
-        ORDER BY created_at DESC
-      `);
+    async findPage({ page, pageSize }) {
+      const offset = (page - 1) * pageSize;
+      const [productsResult, countResult] = await Promise.all([
+        pool.query(
+          `
+          SELECT
+            id,
+            name,
+            price_cents,
+            is_active,
+            created_at
+          FROM products
+          ORDER BY created_at DESC, id DESC
+          LIMIT $1 OFFSET $2
+          `,
+          [pageSize, offset],
+        ),
+        pool.query<{ total: string }>("SELECT COUNT(*) AS total FROM products"),
+      ]);
 
-      return result.rows.map(toProductDomain);
+      return {
+        items: productsResult.rows.map(toProductDomain),
+        totalItems: Number(countResult.rows[0]?.total ?? 0),
+      };
     },
   };
 };
